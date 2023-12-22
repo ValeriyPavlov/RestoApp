@@ -1,20 +1,23 @@
-<div class="card" style="width: 40vw;">
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <H2 style="margin-top: 20px; text-decoration: underline;">CAJA:</H2>
+    <div class="card p-3 m-3" style="width: 40vw;">
 
-    <div class="d-flex flex-column align-items-center justify-content-center">
-        <h2 class="p-2 m-2">Caja Inicial: ${{cajaInicial}}</h2>
-        <input type="number" name="caja" id="caja" [(ngModel)]="cajaIngresada" class="p-2 m-2">
-        <button class="btn btn-warning p-2 m-2" (click)="establecerCaja()">Establecer Caja</button>
+        <div class="d-flex flex-column align-items-center justify-content-center">
+            <h2 class="p-2 m-2">Caja Inicial: ${{cajaInicial}}</h2>
+            <input type="number" name="caja" id="caja" [(ngModel)]="cajaIngresada" class="p-2 m-2">
+            <button class="btn btn-primary p-2 m-2" (click)="establecerCaja()">Establecer Caja</button>
+        </div>
+    
     </div>
-
-</div>
-
-<div class="card" style="width: 40vw;">
-
-    <div class="d-flex flex-column align-items-center justify-content-center">
-        <h4>{{mensaje}}</h4>
-        <h4>Efectivo Total: ${{this.efectivo + cajaInicial}}</h4>
-        <h4>Pagos con Tarjeta: ${{this.tarjeta}}</h4>
-        <button class="btn btn-warning m-2 p-2" [disabled]="!chequearMesas()" (click)="cerrarCaja()">Cerrar Caja</button>
+    
+    <div class="card p-3 m-3" style="width: 40vw;">
+    
+        <div class="d-flex flex-column align-items-center justify-content-center">
+            <h4>{{mensaje}}</h4>
+            <h4>Efectivo Total: ${{this.efectivo + cajaInicial}}</h4>
+            <h4>Pagos con Tarjeta: ${{this.tarjeta}}</h4>
+            <button class="btn btn-primary m-2 p-2" [disabled]="!chequearMesas()" (click)="cerrarCaja()">Cerrar Caja</button>
+        </div>
+    
     </div>
-
 </div>
