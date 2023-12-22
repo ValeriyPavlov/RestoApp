@@ -1,0 +1,69 @@
+<div class="container card bg-beige">
+    <div class="d-flex align-items-center justify-content-center">
+        <h2>Agregar Mesa:</h2>
+    </div>
+
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <div class="p-1 m-2">
+            <label for="numero" style="margin-right: 5px;">Numero de Mesa:</label>
+            <input type="number" name="numero" id="numero" placeholder="N° mesa" [(ngModel)]="numero">
+        </div>
+
+        <div class="p-1 m-2">
+            <label for="estado" style="margin-right: 5px;">Estado:</label>
+            <select name="estado" id="estado" [(ngModel)]="estado">
+                <option value="Libre" selected>Libre</option>
+                <option value="A Cobrar">A Cobrar</option>
+                <option value="Ocupada">Ocupada</option>
+                <option value="Controlada">Controlada</option>
+            </select>
+        </div>
+
+        <div>
+            <button class="btn btn-primary m-2" (click)="agregar()">{{this.boton}}</button>
+            <button class="btn btn-warning" *ngIf="this.boton == 'Modificar'" (click)="initialize()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<div class="container card bg-beige" style="margin-top: 5px;">
+    <div class="table-responsive">
+        <div class="d-flex align-items-center justify-content-center">
+            <h2>Mesas:</h2>
+        </div>
+        <table *ngIf="mesas" class="table table-striped table-ligth">
+
+            <thead class="table-dark">
+                <tr>
+                    <th class="text-center fw-bold">
+                        <button class="bg-dark text-white fw-bold" (click)="ordenar('Numero')">Numero</button>
+                    </th>
+                    <th class="text-center fw-bold">
+                        <button class="bg-dark text-white fw-bold" (click)="ordenar('Estado')">Estado</button>
+                    </th>
+                    <th class="text-center fw-bold">
+                        Accion
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody class="table-group-divider">
+                <tr *ngFor="let mesa of mesas">
+                    <td class="text-center">
+                        {{mesa.numero}}
+                    </td>
+                    <td class="text-center">
+                        {{mesa.estado}}
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            <button class="btn btn-warning" (click)="modificar(mesa)" title="MODIFICAR" style="margin-right: 3px;">M</button>
+                            <button class="btn btn-danger" (click)="eliminar(mesa)" title="ELIMINAR">E</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>

@@ -1,0 +1,121 @@
+<div class="container card bg-beige">
+    <div class="d-flex align-items-center justify-content-center">
+        <h2>Agregar Plato:</h2>
+    </div>
+
+    <div class="d-flex flex-row justify-content-center align-items-center">
+
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div class="d-flex flex-column p-2 m-2">
+                <label for="nombre">Nombre del Plato:</label>
+                <input type="text" name="nombre" [(ngModel)]="nombre" id="nombre" placeholder="Ingrese nombre del plato...">
+            </div>
+
+            <div class="d-flex flex-column p-2 m-2">
+                <label for="descripcion">Descripcion (opcional):</label>
+                <input type="text" name="descripcion" id="descripcion" [(ngModel)]="descripcion" placeholder="Ingrese descripcion del plato...">
+            </div>
+
+            <div class="d-flex flex-column p-2 m-2">
+                <label for="precio">Precio:</label>
+                <input type="number" name="precio" id="precio" [(ngModel)]="precio" placeholder="Ingrese el precio del plato...">
+            </div>
+        </div>
+
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div class="d-flex flex-column p-2 m-2">
+                <label for="categoria">Categoria:</label>
+                <select name="categoria" id="categoria" [(ngModel)]="categoria">
+                    <option value="" selected disabled>Seleccione una opcion</option>
+                    <option value="Cocina">Cocina</option>
+                    <option value="Barra">Barra</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+    
+            <div class="d-flex flex-column p-2 m-2">
+                <label for="tipo">Tipo:</label>
+                <select name="tipo" id="tipo" [(ngModel)]="tipo">
+                    <option value="" selected disabled>Seleccione una opcion</option>
+                    <option value="Entrada">Entrada</option>
+                    <option value="Principal">Principal</option>
+                    <option value="Postre">Postre</option>
+                    <option value="Con Alcohol">Con Alcohol</option>
+                    <option value="Sin Alcohol">Sin Alcohol</option>
+                    <option value="Gasificada">Gasificada</option>
+                    <option value="Sin Gas">Sin Gas</option>
+                    <option value="Cerveza">Cerveza</option>
+                    <option value="Trago">Trago</option>
+                    <option value="Vino">Vino</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-center">
+        <button class="btn btn-primary m-2 p-2" (click)="agregar()" style="width: 15%;">{{this.boton}}</button>
+        <button class="btn btn-warning" *ngIf="this.boton == 'Modificar'" (click)="initialize()">Cancelar</button>
+    </div>
+</div>
+
+
+
+<div class="container card bg-beige" style="margin-top: 5px;">
+    <div class="table-responsive">
+        <div class="d-flex align-items-center justify-content-center">
+            <h2>Platos:</h2>
+        </div>
+        <table *ngIf="platos" class="table table-striped table-ligth">
+
+            <thead class="table-dark">
+                <tr>
+                    <th class="text-center fw-bold">
+                        <button class="bg-dark text-white fw-bold" (click)="ordenar('Nombre')">Nombre</button>
+                    </th>
+                    <th class="text-center fw-bold">
+                        <button class="bg-dark text-white fw-bold" (click)="ordenar('Precio')">Precio</button>
+                    </th>
+                    <th class="text-center fw-bold">
+                        Descripcion
+                    </th>
+                    <th class="text-center fw-bold">
+                        <button class="bg-dark text-white fw-bold" (click)="ordenar('Categoria')">Categoria</button>
+                    </th>
+                    <th class="text-center fw-bold">
+                        <button class="bg-dark text-white fw-bold" (click)="ordenar('Tipo')">Tipo</button>
+                    </th>
+                    <th class="text-center fw-bold">
+                        Accion
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody class="table-group-divider">
+                <tr *ngFor="let plato of platos">
+                    <td class="text-center">
+                        {{plato.nombre}}
+                    </td>
+                    <td class="text-center">
+                        {{plato.precio}}
+                    </td>
+                    <td class="text-center">
+                        {{plato.descripcion}}
+                    </td>
+                    <td class="text-center">
+                        {{plato.categoria}}
+                    </td>
+                    <td class="text-center">
+                        {{plato.tipo}}
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            <button title="MODIFICAR" class="btn btn-warning" (click)="modificar(plato)" style="margin-right: 3px;">M</button>
+                            <button title="ELIMINAR" class="btn btn-danger" (click)="eliminar(plato)">E</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>

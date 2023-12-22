@@ -1,0 +1,166 @@
+
+<div class="container d-flex flex-row align-items-center justify-content-start">
+
+  <div class="boundary" style="margin-top: 5px; margin-left: 5px;" *ngIf="!selectedMesa">
+
+    <div *ngFor="let mesa of mesas" class="mesa-box" cdkDragBoundary=".boundary" cdkDrag [cdkDragFreeDragPosition]="{x: mesa.x, y: mesa.y}" (cdkDragStarted)="onDragStarted($event, mesa.numero)" (cdkDragEnded)="onDragEnded($event, mesa.numero)" [style.backgroundColor]="setColor(mesa)">
+      <div class="handle" cdkDragHandle>
+        <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+          <path d="M0 0h24v24H0z" fill="none"></path>
+        </svg>
+      </div>
+      <button (click)="seleccionar(mesa)" style="background-color: rgba(0,0,0,0); width: 80px; height: 50px;">{{mesa.numero}}</button>
+    </div>
+  
+  </div>
+</div>
+
+
+<div *ngIf="selectedMesa">
+
+  <h2 class="p-2 m-2 text-center" style="text-decoration: underline;">Comanda para mesa {{selectedMesa.numero}}:</h2>
+
+  <div class="d-flex flex-row justify-content-between">
+    <button class="btn btn-warning p-1 m-1" (click)="inicializar()">Volver</button>
+    <div class=" p-2 m-2" style="width: 40vw;">
+
+      <div class="card p-3 m-3">
+        <h4 class="text-center">Pedidos:</h4>
+        <div class="d-flex flex-row align-items-between justify-content-between">
+          <table *ngIf="pedidos" class="table table-striped table-ligth">
+
+            <thead class="table-dark">
+                <tr>
+                    <th class="text-center fw-bold">
+                        Cant.
+                    </th>
+                    <th class="text-center fw-bold">
+                        Producto
+                    </th>
+                    <th class="text-center fw-bold">
+                        Precio U.
+                    </th>
+                    <th class="text-center fw-bold">
+                        Precio T.
+                    </th>
+                    <th class="text-center fw-bold">
+                        Accion
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody class="table-group-divider">
+                <tr *ngFor="let pedido of pedidos">
+                    <td class="text-center">
+                      {{pedido.cantidad}}
+                    </td>
+                    <td class="text-center">
+                      {{pedido.plato.nombre}}
+                    </td>
+                    <td class="text-center">
+                      {{pedido.plato.precio}}
+                    </td>
+                    <td class="text-center">
+                      {{pedido.plato.precio * pedido.cantidad}}
+                    </td>
+                    <td class="text-center">
+                      <div class="d-flex flex-row justify-content-center align-items-center">
+                        <button class="btn btn-success" style="height: 33px;" (click)="modificarCantidad(pedido, 1)" title="Sumar">+</button>
+                        <button class="btn btn-warning m-1" style="height: 33px;" (click)="modificarCantidad(pedido, -1)" title="Restar">-</button>
+                        <button class="btn btn-danger m-1" style="height: 33px;" (click)="modificarCantidad(pedido, 0)" title="Eliminar">E</button>
+                        <button class="btn btn-danger" style="height: 33px;" (click)="anularCantidad(pedido)" title="Anular">A</button>
+                      </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <h5 class="fw-bold text-end" style="text-decoration-line: overline;"> TOTAL: {{precioFinal}} $</h5>
+
+        <label for="detalle">Detalle:</label>
+        <input type="text" name="comentario" id="comentario" placeholder="Comentario adicional..." [(ngModel)]="comentario">
+
+        <div class="d-flex flex-column align-items-center justify-content-center">
+          <button class="btn btn-primary m-1 p-1" (click)="crearComanda()" style="width: 35%;">Enviar Comanda</button>
+          <button class="btn btn-secondary m-1 p-1" style="width: 35%;" (click)="controlar()">Control de Mesa</button>
+          <button class="btn btn-danger m-1 p-1" style="width: 35%;" (click)="cerrarMesa()">Cerrar Mesa</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="width: 55vw; margin-right: 5%;" *ngIf="!cerrarM">
+
+      <div class="d-flex flex-row card justify-content-center p-1">
+        <h4>Categoria: </h4>
+        <button class="btn" [style.backgroundColor]="seleccionarCategoria(this.botonesBarra)" (click)="mostrarBotones('Barra')" style="margin-right: 10px;">Barra</button>
+        <button class="btn" [style.backgroundColor]="seleccionarCategoria(this.botonesCocina)" (click)="mostrarBotones('Cocina')">Cocina</button>
+      </div>
+
+      <div class="d-flex flex-row card justify-content-center p-1">
+        <h4>Tipo: </h4>
+        <button *ngFor="let tipo of getTipos()" class="btn btn-info m-1" (click)="seleccionarTipo(tipo)">{{tipo}}</button>
+      </div>
+      <div *ngIf="tipoSeleccionado">
+        <button *ngFor="let plato of getPlatos()" class="btn m-1 boton" (click)="agregar(plato)">{{plato.nombre}}</button>
+      </div>
+
+    </div>
+
+    <div class="card" style="width: 55vw; margin-right: 5%;" *ngIf="cerrarM">
+
+      <h4 class="text-center m-2 p-2" style="text-decoration: underline;">TOTAL a Pagar: ${{getTotal()}}</h4>
+
+      <div class="d-flex flex-row align-items-center justify-content-center p-2 m-2">
+        <div class="d-flex flex-column p-2 m-2">
+          <label for="ef">Efectivo:</label>
+          <input type="number" name="ef" id="ef" [(ngModel)]="efectivo">
+        </div>
+        <div class="d-flex flex-column p-2 m-2">
+          <label for="ta">Tarjeta:</label>
+          <input type="number" name="ta" id="ta" [(ngModel)]="tarjeta">
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-center p-3 m-3">
+        <button class="btn btn-danger" [disabled]="tarjeta+efectivo != getTotal()" (click)="confirmarCerrarMesa()">Cerrar Mesa</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div [hidden]="true">
+  <div id="comanda">
+    <h2>Pedido mesa N° {{this.selectedMesa?.numero}}.</h2>
+    <h4>Hora: {{this.getHora()}}</h4>
+    <br>
+    <h4 [innerHTML]="this.getPedidos()"></h4>
+    <br>
+    <h4 *ngIf="this.comentario!=''">Comentario: {{this.comentario}}</h4>
+  </div>
+</div>
+
+<div [hidden]="true">
+  <div id="control">
+    <h3>Cuenta mesa N° {{this.selectedMesa?.numero}}.</h3>
+    <h5>Hora: {{this.getHora()}}</h5>
+    <br>
+    <div style="display: flex; justify-content: space-between;">
+      <span style="text-decoration: underline;">Cant.</span>
+      <span style="text-decoration: underline;">Descr.</span>
+      <span style="text-decoration: underline;">Precio</span>
+    </div>
+    <div *ngFor="let item of this.pedidos" style="display: flex; justify-content: space-between;">
+      <span>{{item.cantidad}}</span>
+      <span>{{item.plato.nombre}}</span>
+      <span>{{item.plato.precio * item.cantidad}}</span>
+    </div>
+    <span>==========================</span>
+    <div style="display: flex; justify-content: space-between;">
+      <h4>TOTAL: </h4>
+      <h4>${{getTotal()}}</h4>
+    </div>
+    <h5>¡Gracias por su visita! ¡Vuelva pronto!</h5>
+  </div>
+</div>
