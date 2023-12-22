@@ -267,6 +267,21 @@ export class ComandaComponent {
   }
 
   public confirmarCerrarMesa(){
+    if(this.pedidos.length > 0 && this.selectedMesa != undefined && this.selectedMesa.estado == "Libre"){
+      let comanda = new Comanda(this.selectedMesa.numero, this.pedidos, this.comentario);
+      this.dbService.agregarJson(comanda, "comandas");
+    }
+    if(this.pedidos.length > 0 && this.selectedMesa != undefined && this.selectedMesa.estado != "Libre"){
+      let ultimaComanda = this.buscarComanda();
+      if(ultimaComanda != undefined){
+        ultimaComanda.comentario = this.comentario;
+        ultimaComanda.pedido = this.pedidos;
+      }
+      if(this.chequearNuevos()){
+        this.dbService.modificarJson(this.comandas, "comandas");
+      }
+    }
+    
     this.mesas.forEach(m => {
       if(this.selectedMesa?.numero == m.numero){
         m.estado = "Libre";
@@ -337,7 +352,7 @@ export class ComandaComponent {
     let horas = hora.getHours();
     let minutos = hora.getMinutes();
     let dia = hora.getDate();
-    let mes = hora.getMonth();
+    let mes = hora.getMonth() + 1;
     let anio = hora.getFullYear();
     let horasStr = "";
     let miutosStr = "";
