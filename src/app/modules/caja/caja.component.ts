@@ -54,8 +54,9 @@ export class CajaComponent {
 
   public cerrarCaja(){
     if(this.chequearMesas() && confirm("Esta seguro que desea cerrar la caja?")){
-      let fecha = new Date();
-      let fileName = `Ventas_${fecha.getDay()}-${fecha.getMonth()}-${fecha.getFullYear()}_T_${this.tarjeta}_E_${this.efectivo - this.cajaInicial}`;
+      const fecha = new Date();
+
+      let fileName = `Ventas_${fecha.getDate()}-${fecha.getMonth()+1}-${fecha.getFullYear()}_Efectivo_${this.efectivo}_Tarjeta_${this.tarjeta}`;
       this.dbService.exportComandasToXls(this.comandas, fileName);
 
       let com: Comanda[] = [];

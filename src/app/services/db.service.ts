@@ -34,7 +34,7 @@ export class DbService {
   public exportComandasToXls(comandas: Comanda[], fileName: string) {
     const comandasMapped = comandas.map((comanda) => {
       return {
-        Fecha: `${comanda.fecha}`,
+        Fecha: `${this.getFecha(comanda.fecha)}`,
         Mesa: `${comanda.mesa}`,
         Pedidos: `${this.getPedidos(comanda.pedido)}`
       };
@@ -47,12 +47,44 @@ export class DbService {
 
   private getPedidos(pedidos: Pedido[]){
     let retorno = "";
-    let i = 1;
+    let i = 0;
     pedidos.forEach(p => {
-      retorno += `${i}) ${p.cantidad}x ${p.plato.nombre} `
       i += 1;
+      if(i != 1){retorno += ", "}
+      retorno += `${i}) ${p.cantidad}x ${p.plato.nombre} $${p.plato.precio * p.cantidad}`
     });
     return retorno;
+  }
+
+  private getFecha(date: Date){
+
+    const fecha = new Date(date);
+
+    let horas = fecha.getHours();
+    let minutos = fecha.getMinutes();
+    let segundos = fecha.getSeconds();
+    let dia = fecha.getDate();
+    let mes = fecha.getMonth() + 1;
+    let anio = fecha.getFullYear();
+    let horasStr = "";
+    let minutosStr = "";
+    let segundosStr = "";
+    if(horas < 10){
+      horasStr = `0${horas}`;
+    }else{
+      horasStr = `${horas}`;
+    }
+    if(minutos < 10){
+      minutosStr = `0${minutos}`;
+    }else{
+      minutosStr = `${minutos}`;
+    }
+    if(segundos < 10){
+      segundosStr = `0${segundos}`;
+    }else{
+      segundosStr = `${segundos}`;
+    }
+    return `${horasStr}:${minutosStr}:${segundosStr} ${dia}/${mes}/${anio}`;
   }
 
 

@@ -287,6 +287,7 @@ export class ComandaComponent {
     this.dbService.modificarJson(efect, "efectivo");
     this.dbService.modificarJson(tarj, "tarjeta");
     this.dbService.modificarJson(this.mesas, "mesas");
+    this.controlar();
     this.inicializar();
     this.cerrarM = false;
   }
@@ -298,6 +299,7 @@ export class ComandaComponent {
       this.pedidos.forEach(p => {
         if(pedido == p){
           p.plato.precio = 0;
+          p.plato.nombre = `A_${p.plato.nombre}`;
         }
       });
       if(this.comandas.length > 0){
